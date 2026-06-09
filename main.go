@@ -82,17 +82,26 @@ item := SearchResult{
     ResultURL:   link,
     ResultDesc:  desc,
 }
-results append(result, item)
+results =append(result, item)
 }
 return results, nil
 }
 func main() {
 search:= "golang backend"
-url:=buildBingURL(search, com, 1, 10)
+url:=buildBingURL(search, "com", 1, 10)
 netw, err:=executeScrapeRequest(url)
 if err!=nil{
 	log.Fatalf("There was a error while initiating the network pipeline", err)
 }
+defer netw.Body.Close()
+data, errr:=parseBingResults(netw)
+if errr!=nil{
+	fmt.Println("There was an error while parsing the search result", errr)
+}
+for _, result:= range data{
+	fmt.Println("The ResultURL", result.ResultURL)
+	fmt.Println("The description goes on: ", result.ResultDesc)
+}	
 
 
 }
