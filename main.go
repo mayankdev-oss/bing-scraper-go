@@ -31,6 +31,16 @@ randomIndex := rand.IntN(len(userAgents))
 return userAgents[randomIndex]
 }
 
+func buildBingURL(searchTerm string, country string, page int64, count int64,) (string) {
+//modifiedArg1:= strings.ReplaceAll(searchTerm, "-", " ")
+modifiedArg1:= strings.ReplaceAll(searchTerm, " ", "+")
+result:= fmt.Sprintf("https://www.bing.%s/search?q=%s&first=%d&count=%d", country, modifiedArg1, page, count)
+return result
+
+}
+
+
+
 func main() {
 
 
