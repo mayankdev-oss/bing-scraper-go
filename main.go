@@ -15,7 +15,7 @@ var BingDomains = map[string]string{  //alll the domains inserted into a map typ
 	"com":"com", "uk": "co.uk",
 }
 
-type Searchresult struct{
+type SearchResult struct{
 	ResultRank int
 	ResultURL string
 	ResultTitle string
@@ -26,6 +26,10 @@ var userAgents=[]string{  //a list of browswer it creates, u need to randomize t
 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"                          
 }
 
+func randomUserAgent()(string) {
+randomIndex := rand.IntN(len(userAgents))
+return userAgents[randomIndex]
+}
 
 func main() {
 
