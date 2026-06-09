@@ -87,6 +87,12 @@ results append(result, item)
 return results, nil
 }
 func main() {
+search:= "golang backend"
+url:=buildBingURL(search, com, 1, 10)
+netw, err:=executeScrapeRequest(url)
+if err!=nil{
+	log.Fatalf("There was a error while initiating the network pipeline", err)
+}
 
 
 }
