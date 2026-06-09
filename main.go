@@ -1,12 +1,14 @@
 package main
 
-import(
-	"github.com/PuerkitoBio/goquery"
-	"strings"
-	"net/http"
-	"time"
-	"math/rand"
+import (
 	"fmt"
+	"log"
+	"math/rand"
+	"net/http"
+	"strings"
+	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
 
@@ -39,8 +41,51 @@ return result
 
 }
 
+func executeScrapeRequest(targetURL string) (*http.Response, error){
+req, err:=http.NewRequest("GET", targetURL, nil)
+if err!=nil{
+	log.Fatalf("Error while creatjng the request:", err)
+}
+req.Header.Set("User-Agent", randomUserAgent)
 
+// client :=http.Client{
+// 	Timeout: 10* time.Second,
+// }
 
+// resp, err:=client.Do(req)
+// if err!=nil{
+// 	log.Fatalf("Error sending the request")
+// }
+
+resp, err:=http.DefaultClient.Do(req)
+if err!=nil{
+ log.Fatalf("Error while sending the request: ", err)
+}
+//defer resp.Body.Close()
+return resp
+}
+
+func parseBingResults(resp *http.Response) ([]SearchResult, error) {
+	
+doc, err := goquery.NewDocumentFromReader(resp.Body)
+if err != nil {
+    return nil, err
+}
+var results []SearchResult
+doc.Find("li.b_algo").Each(func(i int, s *goquery.Selection)){
+title := s.Find("h2 a").Text()
+desc := s.Find("p").Text()
+link, exists := s.Find("h2 a").Attr("href")
+item := SearchResult{
+    ResultRank:  i + 1,  
+    ResultTitle: title,
+    ResultURL:   link,
+    ResultDesc:  desc,
+}
+results append(result, item)
+}
+return results, nil
+}
 func main() {
 
 
